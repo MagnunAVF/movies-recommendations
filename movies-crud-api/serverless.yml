@@ -1,0 +1,17 @@
+service: movies-crud-api
+app: movies-recommendations
+org: magcorp
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: test
+          method: get
