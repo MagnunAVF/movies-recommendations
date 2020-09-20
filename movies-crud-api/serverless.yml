@@ -9,12 +9,32 @@ provider:
   runtime: nodejs10.x
 
 plugins:
+  - serverless-offline-sqs
   - serverless-offline
+
+custom:
+  serverless-offline-sqs:
+    autoCreate: true
+    apiVersion: '2012-11-05'
+    endpoint: http://0.0.0.0:9324
+    region: us-east-1
+    accessKeyId: root
+    secretAccessKey: root
+    skipCacheInvalidation: false
 
 functions:
   hello:
     handler: handler.hello
     events:
-      - http:
-          path: test
-          method: get
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - TestQueue
+              - Arn
+
+resources:
+  Resources:
+    TestQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: TestQueue
